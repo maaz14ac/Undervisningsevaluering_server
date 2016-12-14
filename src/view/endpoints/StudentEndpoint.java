@@ -55,4 +55,20 @@ public class StudentEndpoint extends UserEndpoint {
             return errorResponse(404, "Failed. Couldn't delete the chosen review.");
         }
     }
+
+    /**
+     * Nedenstående er OPTIONS metoder udelukkende til at løse CORS-problemstillingen i forbindelse med localhost.
+     * Læs mere på: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+     * */
+    @OPTIONS
+    @Path("/review")
+    public Response optionsAddDeleteReview() {
+        return Response
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .build();
+    }
+
 }

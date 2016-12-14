@@ -23,7 +23,7 @@ public class UserEndpoint {
      * @return En JSON String
      */
     @GET
-    @Consumes("applications/json")
+    @Consumes("application/json")
     @Path("/lecture/{code}")
     public Response getLectures(@PathParam("code") String code) {
         Gson gson = new Gson();
@@ -59,7 +59,7 @@ public class UserEndpoint {
     }
 
     @GET
-    @Consumes("applications/json")
+    @Consumes("application/json")
     @Path("/review/{lectureId}")
     public Response getReviews(@PathParam("lectureId") int lectureId) {
         Gson gson = new Gson();
@@ -82,23 +82,79 @@ public class UserEndpoint {
         UserDTO user = new Gson().fromJson(data, UserDTO.class);
         UserController userCtrl = new UserController();
 
-        if (user != null) {
-            return successResponse(200, userCtrl.login(user.getCbsMail(), user.getPassword()));
+        /**
+         * Her hashes passwordet (med salt), som så derefter er et sikret password. (Der hashes to gange)
+         */
+        String securedPassword = Digester.hashWithSalt(user.getPassword());
+        String securedPassword2 = Digester.hashWithSalt(securedPassword);
+
+        UserDTO resp = userCtrl.login(user.getCbsMail(), securedPassword2);
+
+        if (resp != null) {
+            return successResponse(200, resp);
         } else {
             return errorResponse(401, "Couldn't login. Try again!");
         }
     }
 
+    /**
+     * Nedenstående er OPTIONS metoder udelukkende til at løse CORS-problemstillingen i forbindelse med localhost.
+     * Læs mere på: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+     * */
+    @OPTIONS
+    @Path("/review/{lectureId}")
+    public Response optionsGetReviews() {
+        return Response
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .build();
+    }
+
+    @OPTIONS
+    @Path("/course/{userId}")
+    public Response optionsGetCourses() {
+        return Response
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .build();
+    }
+
+    @OPTIONS
+    @Path("/lecture/{code}")
+    public Response optionsGetLectures() {
+        return Response
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .build();
+    }
+
+    @OPTIONS
+    @Path("/login")
+    public Response optionsLogin() {
+        return Response
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .build();
+    }
+
     protected Response errorResponse(int status, String message) {
 
-        return Response.status(status).entity(new Gson().toJson(Digester.encrypt("{\"message\": \"" + message + "\"}"))).build();
+        //Tilføjet response headers for at løse CORS problemstillingen.
+        return Response.status(status).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS").entity(new Gson().toJson(Digester.encrypt("{\"message\": \"" + message + "\"}"))).build();
+
         //return Response.status(status).entity(new Gson().toJson("{\"message\": \"" + message + "\"}")).build());
     }
 
     protected Response successResponse(int status, Object data) {
         Gson gson = new Gson();
 
-        return Response.status(status).entity(gson.toJson(Digester.encrypt(gson.toJson(data)))).build();
+        //Tilføjet response headers for at løse CORS problemstillingen.
+        return Response.status(status).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "Content-Type").header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS").entity(gson.toJson(Digester.encrypt(gson.toJson(data)))).build();
+
         //return Response.status(status).entity(gson.toJson(data)).build();
     }
 }
