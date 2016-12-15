@@ -411,4 +411,31 @@ public class AdminController extends UserController {
         return studies;
     }
 
+    public boolean deleteComment(int userId, int reviewId) {
+        boolean isCommentDeleted = true;
+
+        try {
+            Map<String, String> isDeleted = new HashMap();
+
+            isDeleted.put("comment", "");
+
+            Map<String, String> whereParams = new HashMap();
+
+            if(userId != 0) {
+                whereParams.put("user_id", String.valueOf(userId));
+            }
+
+            whereParams.put("id", String.valueOf(reviewId));
+
+            DBWrapper.updateRecords("review", isDeleted, whereParams);
+            return isCommentDeleted;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Logging.log(e,2,"Kommentar blev ikke fjernet.");
+            isCommentDeleted = false;
+        }
+        return isCommentDeleted;
+    }
+
 }
