@@ -15,9 +15,9 @@ import java.util.ArrayList;
 @Path("/api/teacher")
 public class TeacherEndpoint extends UserEndpoint {
     /**
-     * En metode til at hente lektioner for et enkelt kursus i form af en JSON String.
+     * En metode til at hente gennemsnittet for en given lektion.
      *
-     * @param code Fagkoden på det kursus man ønsker at hente et gennemsnit på.
+     * @param code Fagkoden på den lektion man ønsker at hente et gennemsnit på.
      * @return En double
      */
     @GET
@@ -25,15 +25,14 @@ public class TeacherEndpoint extends UserEndpoint {
     public Response getAvgRatingLecture(@PathParam("code") String code) {
         Gson gson = new Gson();
         TeacherController teacherCtrl = new TeacherController();
-        //UserController userCtrl = new UserController();
-        //ArrayList<ReviewDTO> reviews = userCtrl.getReviews(lectureId);
+
         double courseAvg = teacherCtrl.calculateAverageRatingOnCourse(code);
 
         return successResponse(200, courseAvg);
     }
 
     /**
-     * En metode til at hente lektioner for et enkelt kursus i form af en JSON String.
+     * En metode til at hente gennemsnittet for en given kursus.
      *
      * @param lectureId Fagkoden på det kursus man ønsker at hente et gennemsnit på.
      * @return En double
@@ -43,8 +42,7 @@ public class TeacherEndpoint extends UserEndpoint {
     public Response getAvgRatingCourse(@PathParam("lectureId") int lectureId) {
         Gson gson = new Gson();
         TeacherController teacherCtrl = new TeacherController();
-        //UserController userCtrl = new UserController();
-        //ArrayList<ReviewDTO> reviews = userCtrl.getReviews(lectureId);
+
         double lectureAvg = teacherCtrl.calculateAverageRatingOnLecture(lectureId);
 
         System.out.println("Dette; " + lectureAvg);

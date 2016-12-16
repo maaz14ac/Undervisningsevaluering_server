@@ -15,6 +15,12 @@ import javax.ws.rs.core.Response;
 @Path("/api/student")
 public class StudentEndpoint extends UserEndpoint {
 
+    /**
+     * En metode til at tilføje reviews for en lektion.
+     *
+     * @param json indeholdende et review.
+     * @return boolean.
+     */
     @POST
     @Consumes("application/json")
     @Path("/review")
@@ -36,6 +42,12 @@ public class StudentEndpoint extends UserEndpoint {
         }
     }
 
+    /**
+     * En metode til at softdelete et review. (Både kommentar og rating)
+     *
+     * @param data oplysninger på bruger og review der ønskes fjernet.
+     * @return boolean.
+     */
     @DELETE
     @Consumes("application/json")
     @Path("/review/")

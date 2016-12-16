@@ -16,6 +16,9 @@ public class TeacherController extends UserController {
         this.currentTeacher = currentTeacher;
     }
 
+    /**
+     * Udregner gennemsnittet på en lektion ved hjælp af lectureId.
+     * */
     public double calculateAverageRatingOnLecture(int lectureId) {
         //DecimalFormat df = new DecimalFormat("#.00");
         getReviews(lectureId);
@@ -36,6 +39,9 @@ public class TeacherController extends UserController {
         return average;
     }
 
+    /**
+     * Udregner gennemsnittet på et kursus ved hjælp af courseId.
+     * */
     public double calculateAverageRatingOnCourse(String course) {
 
         int lectureId = 0;

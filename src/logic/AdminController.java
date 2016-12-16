@@ -411,6 +411,10 @@ public class AdminController extends UserController {
         return studies;
     }
 
+    /**
+     * Sørger for at slette en kommentar for en given bruger ved hjælp af et ID.
+     * Sletter udelukkende kommentaren.
+     * */
     public boolean deleteComment(int userId, int reviewId) {
         boolean isCommentDeleted = true;
 

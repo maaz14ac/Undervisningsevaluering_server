@@ -58,6 +58,12 @@ public class UserEndpoint {
         }
     }
 
+    /**
+     * En metode til at hente de reviews for en lektion.
+     *
+     * @param lectureId Id'et på den lektion man ønsker at hente reviews for.
+     * @return De givne reviews i form af en JSON String.
+     */
     @GET
     @Consumes("application/json")
     @Path("/review/{lectureId}")
@@ -73,12 +79,16 @@ public class UserEndpoint {
         }
     }
 
+    /**
+     * En metode til at verificere login-oplysninger.
+     *
+     * @param data oplysninger på brugeren der ønsker at logge ind.
+     * @return En JSON String.
+     */
     @POST
     @Consumes("application/json")
     @Path("/login")
     public Response login(String data) {
-
-        Gson gson = new Gson();
         UserDTO user = new Gson().fromJson(data, UserDTO.class);
         UserController userCtrl = new UserController();
 

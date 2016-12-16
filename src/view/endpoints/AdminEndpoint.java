@@ -9,10 +9,16 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 /**
- *
+ * Created by Mahroz on 15/12/2016.
+ * Klassen er endpoint for en admin-bruger og håndtere API-kald fra en klient.
  */
 @Path("/api/admin")
 public class AdminEndpoint extends UserEndpoint {
+    /**
+     * En metode til at slette en kommentar fra en bruger. (Berører ikke selve ratingen)
+     * @param data oplysninger på bruger og review der ønskes fjernet.
+     * @return boolean.
+     */
     @DELETE
     @Consumes("application/json")
     @Path("/review")
